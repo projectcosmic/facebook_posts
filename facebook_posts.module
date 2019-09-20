@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * @file
+ * Pull posts from a Facebook Page.
+ */
+
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for facebook_post.
+ *
+ * Maintains Facebook post entities to be within the limit configuration
+ * setting.
+ */
+function facebook_posts_facebook_post_insert(ContentEntityInterface $post) {
+  $storage = \Drupal::entityTypeManager()->getStorage('facebook_post');
+  $entities = $storage->loadMultiple();
+
+  $limit = \Drupal::config('facebook_posts.settings')->get('limit');
+  $overflow = count($entities) - $limit;
+
+  if ($overflow > 0) {
+    $expired = array_slice($entities, 0, $overflow);
+    $storage->delete($expired);
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function facebook_posts_cron() {
+  $drupal_state = \Drupal::state();
+
+  $next_execution = $drupal_state->get('faceboook_posts.next_execution', 0);
+  $now = \Drupal::time()->getRequestTime();
+
+  if ($next_execution < $now) {
+    \Drupal::service('facebook_posts.fetcher')->fetch();
+    $drupal_state->set('facebook_posts.next_execution', $now + (60 * 60));
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function facebook_posts_theme() {
+  return [
+    'facebook_post' => [
+      'render element' => 'elements',
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for Facebook post templates.
+ *
+ * Default template: facebook-post.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ */
+function template_preprocess_facebook_post(array &$variables) {
+  $elements = $variables['elements'];
+  /** @var \Drupal\facebook_posts\FacebookPostInterface $post */
+  $post = $elements['#facebook_post'];
+
+  // Allow easy access to the entity object.
+  $variables['facebook_post'] = $post;
+
+  $variables['url'] = Url::fromUri(
+    'https://facebook.com/' . $post->getPageId() . '_' . $post->id()
+  );
+
+  // Move base fields into content variable for consistency.
+  foreach (Element::getVisibleChildren($elements) as $key) {
+    $variables['content'][$key] = $elements[$key];
+  }
+}

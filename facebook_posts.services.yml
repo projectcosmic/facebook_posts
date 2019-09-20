@@ -1,0 +1,10 @@
+services:
+  facebook_posts.sdk_factory:
+    class: \Drupal\facebook_posts\FacebookFactory
+    arguments: ['@config.factory']
+  facebook_posts.sdk:
+    class: \Facebook\Facebook
+    factory: facebook_posts.sdk_factory:create
+  facebook_posts.fetcher:
+    class: \Drupal\facebook_posts\FacebookFetcher
+    arguments: ['@facebook_posts.sdk', '@config.factory', '@entity_type.manager']

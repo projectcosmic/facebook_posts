@@ -1,0 +1,17 @@
+{
+    "name": "projectcosmic/facebook_posts",
+    "description": "Pull posts from a Facebook Page.",
+    "type": "drupal-module",
+    "authors": [
+        {
+            "name": "Justin Wong",
+            "email": "justin@cosmic.org.uk",
+            "homepage": "https://cosmic.org.uk",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "facebook/graph-sdk": "^5.7"
+    }
+}

@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a Facebook post.
+ *
+ * Available variables:
+ * - facebook_post: The facebook_post entity.
+ * - content: All content items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - attributes: HTML attributes for the containing element.
+ * - url: URL to the post on facebook.com.
+ *
+ * @see template_preprocess_facebook_post()
+ * @ingroup themeable
+ */
+#}
+<article{{ attributes }}>
+
+  <div{{ content_attributes }}>
+    {{ content|without('created')}}
+  </div>
+
+  <footer>
+    {{ content.created }}
+  </footer>
+
+</article>
