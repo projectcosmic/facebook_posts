@@ -34,7 +34,7 @@ function facebook_posts_facebook_post_insert(ContentEntityInterface $post) {
 function facebook_posts_cron() {
   $drupal_state = \Drupal::state();
 
-  $next_execution = $drupal_state->get('faceboook_posts.next_execution', 0);
+  $next_execution = $drupal_state->get('facebook_posts.next_execution', 0);
   $now = \Drupal::time()->getRequestTime();
 
   if ($next_execution < $now) {
