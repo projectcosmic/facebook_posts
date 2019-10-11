@@ -49,7 +49,7 @@ class FacebookFetcherTest extends KernelTestBase {
    */
   public function testFetch() {
     $this->config('facebook_posts.settings')->set('limit', 1)->save(TRUE);
-    $this->container->get('facebook_posts.fetcher')->fetch();
+    $this->container->get('facebook_posts.fetcher')->fetch('stub_token');
 
     $posts = $this->facebookPostStorage->loadMultiple();
     $this->assertCount(1, $posts, 'Posts gets saved.');
@@ -63,7 +63,7 @@ class FacebookFetcherTest extends KernelTestBase {
     $this->assertEquals(1534409033, $post->getCreatedTime());
 
     $this->config('facebook_posts.settings')->set('limit', 2)->save(TRUE);
-    $this->container->get('facebook_posts.fetcher')->fetch();
+    $this->container->get('facebook_posts.fetcher')->fetch('stub_token');
     $this->assertCount(
       2,
       $this->facebookPostStorage->loadMultiple(),

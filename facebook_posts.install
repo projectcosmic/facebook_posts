@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Facebook posts module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function comment_uninstall() {
+  // Remove state settings.
+  \Drupal::state()->delete('facebook_posts.access_token');
+  \Drupal::state()->delete('facebook_posts.next_execution');
+}

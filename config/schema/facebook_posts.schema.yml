@@ -7,8 +7,6 @@ facebook_posts.settings:
       type: string
     app_secret:
       type: string
-    access_token:
-      type: string
     limit:
       type: integer
       label: The maximum number of posts to keep.

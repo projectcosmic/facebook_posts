@@ -8,3 +8,6 @@ services:
   facebook_posts.fetcher:
     class: \Drupal\facebook_posts\FacebookFetcher
     arguments: ['@facebook_posts.sdk', '@config.factory', '@entity_type.manager']
+  facebook_posts.controller:
+    class: Drupal\facebook_posts\Controller\FacebookPostsController
+    arguments: ['@facebook_posts.sdk', '@config.factory', '@state', '@messenger', '@string_translation']

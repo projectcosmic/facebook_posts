@@ -1,0 +1,5 @@
+facebook_posts.authenticate:
+  title: 'Facebook Authenticate'
+  parent: system.admin_config_services
+  description: 'Authenticate your Facebook account with the site so that it can get page posts.'
+  route_name: facebook_posts.authenticate

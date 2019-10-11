@@ -52,12 +52,12 @@ class FacebookFetcher implements FacebookFetcherInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetch() {
+  public function fetch($token) {
     $page = $this->config->get('page_id');
     $limit = $this->config->get('limit');
 
     $response = $this->sdkInstance
-      ->get("/$page/feed?limit=$limit")
+      ->get("/$page/feed?limit=$limit", $token)
       ->getDecodedBody();
 
     foreach ($response['data'] as $post) {

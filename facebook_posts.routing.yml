@@ -1,0 +1,19 @@
+facebook_posts.authenticate:
+  path: '/facebook-posts/authenticate'
+  defaults:
+    _controller: 'facebook_posts.controller:authenticate'
+    _title: Authenticate
+  requirements:
+    _permission: 'authorize facebook account'
+  options:
+    _admin_route: TRUE
+
+facebook_posts.receive_token:
+  path: '/facebook-posts/receive-token'
+  defaults:
+    _controller: 'facebook_posts.controller:receiveToken'
+    _title: Received Token
+  requirements:
+    _permission: 'authorize facebook account'
+  options:
+    _admin_route: TRUE

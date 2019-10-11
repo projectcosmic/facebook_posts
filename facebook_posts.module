@@ -5,7 +5,6 @@
  * Pull posts from a Facebook Page.
  */
 
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 
@@ -34,12 +33,14 @@ function facebook_posts_facebook_post_insert() {
 function facebook_posts_cron() {
   $drupal_state = \Drupal::state();
 
-  $next_execution = $drupal_state->get('facebook_posts.next_execution', 0);
-  $now = \Drupal::time()->getRequestTime();
+  if ($token = $drupal_state->get('facebook_posts.access_token')) {
+    $next_execution = $drupal_state->get('facebook_posts.next_execution', 0);
+    $now = \Drupal::time()->getRequestTime();
 
-  if ($next_execution < $now) {
-    \Drupal::service('facebook_posts.fetcher')->fetch();
-    $drupal_state->set('facebook_posts.next_execution', $now + (60 * 60));
+    if ($next_execution < $now) {
+      \Drupal::service('facebook_posts.fetcher')->fetch($token);
+      $drupal_state->set('facebook_posts.next_execution', $now + (60 * 60));
+    }
   }
 }
 
