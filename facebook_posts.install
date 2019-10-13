@@ -13,3 +13,13 @@ function comment_uninstall() {
   \Drupal::state()->delete('facebook_posts.access_token');
   \Drupal::state()->delete('facebook_posts.next_execution');
 }
+
+/**
+ * Removes defunct access_token setting in config.
+ */
+function facebook_posts_update_8101() {
+  \Drupal::configFactory()
+    ->getEditable('facebook_posts.settings')
+    ->clear('access_token')
+    ->save(TRUE);
+}
