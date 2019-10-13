@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.2] 2019-10-13
+### Fixed
+- Fix incorrect redirection
+
 ## [1.1.1] 2019-10-13
 ### Added
 - Add update hook to delete removed config setting
@@ -24,6 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 1.0.0
 - Initial release
 
-[Unreleased]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/HEAD..1.1.1
+[Unreleased]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/HEAD..1.1.2
+[1.1.2]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.2..1.1.1
 [1.1.1]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.1..1.1.0
 [1.1.0]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.0..1.0.0
