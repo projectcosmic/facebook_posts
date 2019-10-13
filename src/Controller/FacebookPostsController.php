@@ -147,7 +147,7 @@ class FacebookPostsController {
         'We were unable to authenticate with Facebook: @error <a href=":url">Try again.</a>',
         [
           '@error' => $error->getMessage(),
-          ':url' => Url::fromRoute('facebook_posts.authorization')->toString(),
+          ':url' => Url::fromRoute('facebook_posts.authenticate')->toString(),
         ]
       ));
     }
