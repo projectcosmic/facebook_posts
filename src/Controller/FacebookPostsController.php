@@ -9,6 +9,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Facebook\Facebook;
+use Psr\Log\LoggerInterface;
 
 /**
  * Controller routines for facebook_posts routes.
@@ -46,7 +47,14 @@ class FacebookPostsController {
   protected $state;
 
   /**
-   * The state service.
+   * The logger.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
+   * The messenger.
    *
    * @var \Drupal\Core\Messenger\MessengerInterface
    */
@@ -61,15 +69,18 @@ class FacebookPostsController {
    *   The config factory.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   The logger.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
    * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
    *   The translation service.
    */
-  public function __construct(Facebook $instance, ConfigFactoryInterface $config_factory, StateInterface $state, MessengerInterface $messenger, TranslationInterface $string_translation) {
+  public function __construct(Facebook $instance, ConfigFactoryInterface $config_factory, StateInterface $state, LoggerInterface $logger, MessengerInterface $messenger, TranslationInterface $string_translation) {
     $this->sdkInstance = $instance;
     $this->config = $config_factory->get('facebook_posts.settings');
     $this->state = $state;
+    $this->logger = $logger;
     $this->messenger = $messenger;
     $this->stringTranslation = $string_translation;
   }
@@ -129,16 +140,19 @@ class FacebookPostsController {
         // Set access token for matching page.
         foreach ($response['data'] as $page) {
           if ($page_id == $page['id']) {
-            $this->state->set('facebook_posts.access_token', $page['access_token']);
-            $found = TRUE;
+            $found = $page['access_token'];
             break;
           }
         }
 
         if ($found) {
           $page['#markup'] = $this->t('Successfully authenticated.');
+
+          $this->state->set('facebook_posts.access_token', $found);
+          $this->logger->notice('Got page access token.');
         }
         else {
+          $this->logger->warning('Successful authentication but no access to page.');
           throw new \Exception($this->t(
             'There was insufficient permissions to access the <a href=":url">Facebook page</a> configured for the site. Please try again with an account that has administrative access to the page.',
             [':url' => Url::fromUri("https://facebook.com/$page_id")->toString()]

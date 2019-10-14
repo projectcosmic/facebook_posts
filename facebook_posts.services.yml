@@ -1,4 +1,7 @@
 services:
+  logger.channel.facebook_posts:
+    parent: logger.channel_base
+    arguments: ['facebook_posts']
   facebook_posts.sdk_factory:
     class: \Drupal\facebook_posts\FacebookFactory
     arguments: ['@config.factory']
@@ -10,4 +13,10 @@ services:
     arguments: ['@facebook_posts.sdk', '@config.factory', '@entity_type.manager']
   facebook_posts.controller:
     class: Drupal\facebook_posts\Controller\FacebookPostsController
-    arguments: ['@facebook_posts.sdk', '@config.factory', '@state', '@messenger', '@string_translation']
+    arguments: 
+      - '@facebook_posts.sdk'
+      - '@config.factory'
+      - '@state'
+      - '@logger.channel.facebook_posts'
+      - '@messenger'
+      - '@string_translation'
