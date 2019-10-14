@@ -12,7 +12,7 @@ facebook_posts.receive_token:
   path: '/facebook-posts/receive-token'
   defaults:
     _controller: 'facebook_posts.controller:receiveToken'
-    _title: Received Token
+    _title: Authentication Result
   requirements:
     _permission: 'authorize facebook account'
   options:

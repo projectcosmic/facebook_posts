@@ -9,7 +9,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Facebook\Facebook;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Controller routines for facebook_posts routes.
@@ -112,6 +111,8 @@ class FacebookPostsController {
    *   A redirect response to the homepage.
    */
   public function receiveToken() {
+    $page = [];
+
     try {
       $token = $this->sdkInstance
         ->getRedirectLoginHelper()
@@ -123,9 +124,11 @@ class FacebookPostsController {
           ->get('me/accounts', $token)
           ->getDecodedBody();
 
+        $page_id = $this->config->get('page_id');
+
         // Set access token for matching page.
         foreach ($response['data'] as $page) {
-          if ($this->config->get('page_id') == $page['id']) {
+          if ($page_id == $page['id']) {
             $this->state->set('facebook_posts.access_token', $page['access_token']);
             $found = TRUE;
             break;
@@ -133,26 +136,24 @@ class FacebookPostsController {
         }
 
         if ($found) {
-          $this->messenger->addStatus($this->t('Successfully authenticated.'));
+          $page['#markup'] = $this->t('Successfully authenticated.');
         }
         else {
-          throw new Exception($this->t(
-            'There was insufficient permissions to access the Facebook page.'
+          throw new \Exception($this->t(
+            'There was insufficient permissions to access the <a href=":url">Facebook page</a> configured for the site. Please try again with an account that has administrative access to the page.',
+            [':url' => Url::fromUri("https://facebook.com/$page_id")->toString()]
           ));
         }
       }
     }
     catch (\Exception $error) {
-      $this->messenger->addError($this->t(
-        'We were unable to authenticate with Facebook: @error <a href=":url">Try again.</a>',
-        [
-          '@error' => $error->getMessage(),
-          ':url' => Url::fromRoute('facebook_posts.authenticate')->toString(),
-        ]
-      ));
+      $retry = Url::fromRoute('facebook_posts.authenticate')->toString();
+      $page['preface']['#markup'] = '<p>' . $this->t('We were unable to sufficiently authenticate with Facebook:') . '</p>';
+      $page['error']['#markup'] = '<p>' . $error->getMessage() . '</p>';
+      $page['retry']['#markup'] = '<p>' . $this->t('<a href=":url">Try again</a>.', [':uri' => $retry]) . '</p>';
     }
 
-    return new RedirectResponse(Url::fromRoute('<front>')->toString());
+    return $page;
   }
 
 }
