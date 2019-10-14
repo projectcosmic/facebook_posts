@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.3] 2019-10-14
+### Added
+- Add logging channel
+- Fetch on successful authentication
+
+### Changed
+- Use page text instead of redirect \w message
+
 ## [1.1.2] 2019-10-13
 ### Fixed
 - Fix incorrect redirection
@@ -28,7 +36,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 1.0.0
 - Initial release
 
-[Unreleased]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/HEAD..1.1.2
+[Unreleased]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/HEAD..1.1.3
+[1.1.3]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.3..1.1.2
 [1.1.2]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.2..1.1.1
 [1.1.1]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.1..1.1.0
 [1.1.0]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.0..1.0.0
