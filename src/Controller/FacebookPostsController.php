@@ -166,10 +166,11 @@ class FacebookPostsController {
       }
     }
     catch (\Exception $error) {
-      $retry = Url::fromRoute('facebook_posts.authenticate')->toString();
       $page['preface']['#markup'] = '<p>' . $this->t('We were unable to sufficiently authenticate with Facebook:') . '</p>';
       $page['error']['#markup'] = '<p>' . $error->getMessage() . '</p>';
-      $page['retry']['#markup'] = '<p>' . $this->t('<a href=":url">Try again</a>.', [':uri' => $retry]) . '</p>';
+      
+      $retry = Url::fromRoute('facebook_posts.authenticate')->toString();
+      $page['retry']['#markup'] = '<p>' . $this->t('<a href=":url">Try again</a>.', [':url' => $retry]) . '</p>';
     }
 
     return $page;
