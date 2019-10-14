@@ -142,9 +142,9 @@ class FacebookPostsController {
         $page_id = $this->config->get('page_id');
 
         // Set access token for matching page.
-        foreach ($response['data'] as $page) {
-          if ($page_id == $page['id']) {
-            $page_token = $page['access_token'];
+        foreach ($response['data'] as $page_data) {
+          if ($page_id == $page_data['id']) {
+            $page_token = $page_data['access_token'];
             break;
           }
         }
