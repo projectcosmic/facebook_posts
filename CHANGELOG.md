@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.4] 2019-10-14
+### Fixed
+- Fix variable pollution
+
 ## [1.1.3] 2019-10-14
 ### Added
 - Add logging channel
@@ -36,7 +40,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 1.0.0
 - Initial release
 
-[Unreleased]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/HEAD..1.1.3
+[Unreleased]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/HEAD..1.1.4
+[1.1.4]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.4..1.1.3
 [1.1.3]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.3..1.1.2
 [1.1.2]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.2..1.1.1
 [1.1.1]: https://bitbucket.org/projectcosmic/facebook_posts/branches/compare/1.1.1..1.1.0
