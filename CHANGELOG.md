@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.5] 2019-10-14
+### Fixed
+- Fix retry link
+
 ## [1.1.4] 2019-10-14
 ### Fixed
 - Fix variable pollution
