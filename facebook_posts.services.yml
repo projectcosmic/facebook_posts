@@ -15,6 +15,7 @@ services:
     class: Drupal\facebook_posts\Controller\FacebookPostsController
     arguments: 
       - '@facebook_posts.sdk'
+      - '@facebook_posts.fetcher'
       - '@config.factory'
       - '@state'
       - '@logger.channel.facebook_posts'

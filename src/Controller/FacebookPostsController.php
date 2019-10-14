@@ -8,6 +8,7 @@ use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
+use Drupal\facebook_posts\FacebookFetcherInterface;
 use Facebook\Facebook;
 use Psr\Log\LoggerInterface;
 
@@ -37,7 +38,7 @@ class FacebookPostsController {
    *
    * @var \Drupal\facebook_posts\FacebookFetcherInterface
    */
-  protected $facebookFetcher;
+  protected $fetcher;
 
   /**
    * The state service.
@@ -65,6 +66,8 @@ class FacebookPostsController {
    *
    * @param \Facebook\Facebook $instance
    *   An instance of the Facebook PHP SDK.
+   * @param \Drupal\facebook_posts\FacebookFetcherInterface $fetcher
+   *   The fetcher service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
    * @param \Drupal\Core\State\StateInterface $state
@@ -76,8 +79,9 @@ class FacebookPostsController {
    * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
    *   The translation service.
    */
-  public function __construct(Facebook $instance, ConfigFactoryInterface $config_factory, StateInterface $state, LoggerInterface $logger, MessengerInterface $messenger, TranslationInterface $string_translation) {
+  public function __construct(Facebook $instance, FacebookFetcherInterface $fetcher, ConfigFactoryInterface $config_factory, StateInterface $state, LoggerInterface $logger, MessengerInterface $messenger, TranslationInterface $string_translation) {
     $this->sdkInstance = $instance;
+    $this->fetcher = $fetcher;
     $this->config = $config_factory->get('facebook_posts.settings');
     $this->state = $state;
     $this->logger = $logger;
@@ -125,14 +129,14 @@ class FacebookPostsController {
     $page = [];
 
     try {
-      $token = $this->sdkInstance
+      $user_token = $this->sdkInstance
         ->getRedirectLoginHelper()
         ->getAccessToken();
 
-      if ($token) {
-        $found = FALSE;
+      if ($user_token) {
+        $page_token = NULL;
         $response = $this->sdkInstance
-          ->get('me/accounts', $token)
+          ->get('me/accounts', $user_token)
           ->getDecodedBody();
 
         $page_id = $this->config->get('page_id');
@@ -140,16 +144,17 @@ class FacebookPostsController {
         // Set access token for matching page.
         foreach ($response['data'] as $page) {
           if ($page_id == $page['id']) {
-            $found = $page['access_token'];
+            $page_token = $page['access_token'];
             break;
           }
         }
 
-        if ($found) {
+        if ($page_token) {
           $page['#markup'] = $this->t('Successfully authenticated.');
 
-          $this->state->set('facebook_posts.access_token', $found);
+          $this->state->set('facebook_posts.access_token', $page_token);
           $this->logger->notice('Got page access token.');
+          $this->fetcher->fetch($page_token);
         }
         else {
           $this->logger->warning('Successful authentication but no access to page.');
