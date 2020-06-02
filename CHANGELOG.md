@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fix incorrect `hook_uninstall()` implementation name
 
+### Removed
+- Remove `.gitattributes` from export
+
 ## [1.1.5] 2019-10-14
 ### Fixed
 - Fix retry link
