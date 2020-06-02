@@ -8,7 +8,7 @@
 /**
  * Implements hook_uninstall().
  */
-function comment_uninstall() {
+function facebook_posts_uninstall() {
   // Remove state settings.
   \Drupal::state()->delete('facebook_posts.access_token');
   \Drupal::state()->delete('facebook_posts.next_execution');
