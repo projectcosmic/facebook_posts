@@ -10,8 +10,8 @@
             "role": "Developer"
         }
     ],
-    "license": "MIT",
     "require": {
+        "drupal/core": "^8 || ^9",
         "facebook/graph-sdk": "^5.7"
     }
 }

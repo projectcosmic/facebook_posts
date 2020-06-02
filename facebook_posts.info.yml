@@ -2,4 +2,5 @@ name: Facebook Posts
 description: Pull posts from a Facebook Page.
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 project: facebook_posts
