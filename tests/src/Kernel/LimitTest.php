@@ -63,6 +63,13 @@ class LimitTest extends KernelTestBase {
     $this->assertCount($limit, $stored);
     $this->assertEquals($entity_1->id(), reset($stored)->id());
     $this->assertEquals($entity_2->id(), next($stored)->id());
+
+    $entity_3 = $this->createFacebookPost(['id' => 1]);
+
+    $stored = $this->facebookPostStorage->loadMultiple();
+    $this->assertCount($limit, $stored);
+    $this->assertArrayHasKey($entity_3->id(), $stored, 'Posts sorted by created date (not ID) before trimming.');
+    $this->assertArrayNotHasKey($entity_1->id(), $stored, 'Posts sorted by created date (not ID) before trimming.');
   }
 
 }

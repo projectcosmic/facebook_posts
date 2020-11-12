@@ -16,19 +16,22 @@ trait FacebookPostCreationTrait {
    *
    * @var int
    */
-  protected $facebookPostsIndex = 1;
+  protected $facebookPostsIndex = 100;
 
   /**
    * Create and saves a test Facebook post entity.
    *
+   * @param array $params
+   *   Any parameters to create the post with
    * @return \Drupal\facebook_posts\Entity\FacebookPost
    *   The entity.
    */
-  protected function createFacebookPost() {
-    $post = FacebookPost::create([
+  protected function createFacebookPost($params = []) {
+    $post = FacebookPost::create($params + [
       'id' => $this->facebookPostsIndex,
       'page_id' => 123456789012345,
       'message' => $this->randomString(),
+      'created' => 1500000 + $this->facebookPostsIndex,
     ]);
     $post->save();
 

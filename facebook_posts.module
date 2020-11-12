@@ -22,6 +22,9 @@ function facebook_posts_facebook_post_insert() {
   $overflow = count($entities) - $limit;
 
   if ($overflow > 0) {
+    uasort($entities, function ($a, $b) {
+      return $a->created->value - $b->created->value;
+    });
     $expired = array_slice($entities, 0, $overflow);
     $storage->delete($expired);
   }
