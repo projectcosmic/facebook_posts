@@ -57,7 +57,7 @@ class FacebookFetcher implements FacebookFetcherInterface {
     $limit = $this->config->get('limit');
 
     $response = $this->sdkInstance
-      ->get("/$page/feed?limit=$limit", $token)
+      ->get("/$page/posts?limit=$limit", $token)
       ->getDecodedBody();
 
     foreach ($response['data'] as $post) {

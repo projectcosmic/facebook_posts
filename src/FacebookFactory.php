@@ -34,7 +34,7 @@ class FacebookFactory implements FacebookFactoryInterface {
     return new Facebook([
       'app_id' => $this->config->get('app_id'),
       'app_secret' => $this->config->get('app_secret'),
-      'default_graph_version' => 'v4.0',
+      'default_graph_version' => 'v9.0',
     ]);
   }
 

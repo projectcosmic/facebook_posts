@@ -99,7 +99,10 @@ class FacebookPostsController {
     $redirect = Url::fromRoute('facebook_posts.receive_token', [], ['absolute' => TRUE])->toString();
     $auth_url = $this->sdkInstance
       ->getRedirectLoginHelper()
-      ->getLoginUrl($redirect, ['manage_pages']);
+      ->getLoginUrl($redirect, [
+        'pages_read_engagement',
+        'pages_read_user_content'
+      ]);
 
     return [
       'content' => [
@@ -133,22 +136,17 @@ class FacebookPostsController {
         ->getRedirectLoginHelper()
         ->getAccessToken();
 
+      if ($user_token && !$user_token->isLongLived()) {
+        $user_token = $this->sdkInstance
+          ->getOAuth2Client()
+          ->getLongLivedAccessToken($user_token);
+      }
+
       if ($user_token) {
-        $page_token = NULL;
-        $response = $this->sdkInstance
-          ->get('me/accounts', $user_token)
-          ->getDecodedBody();
+        $endpoint = $this->config->get('page_id') . '?fields=access_token';
+        $response = $this->sdkInstance->get($endpoint, $user_token)->getDecodedBody();
 
-        $page_id = $this->config->get('page_id');
-
-        // Set access token for matching page.
-        foreach ($response['data'] as $page_data) {
-          if ($page_id == $page_data['id']) {
-            $page_token = $page_data['access_token'];
-            break;
-          }
-        }
-
+        $page_token = isset($response['access_token']) ? $response['access_token'] : NULL;
         if ($page_token) {
           $page['#markup'] = $this->t('Successfully authenticated.');
 
@@ -157,7 +155,7 @@ class FacebookPostsController {
           $this->fetcher->fetch($page_token);
         }
         else {
-          $this->logger->warning('Successful authentication but no access to page.');
+          $this->logger->warning('Successful authentication but insufficient access to the Facebook page.');
           throw new \Exception($this->t(
             'There was insufficient permissions to access the <a href=":url">Facebook page</a> configured for the site. Please try again with an account that has administrative access to the page.',
             [':url' => Url::fromUri("https://facebook.com/$page_id")->toString()]
