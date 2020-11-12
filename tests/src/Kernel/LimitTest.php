@@ -17,9 +17,7 @@ class LimitTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
-    'facebook_posts',
-  ];
+  protected static $modules = ['facebook_posts'];
 
   /**
    * The facebook post entity storage.

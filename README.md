@@ -20,7 +20,7 @@ composer require projectcosmic/facebook_posts
 
 1. Enable the module.
 2. Edit the configuration `facebook_posts.settings` for the Facebook app to be
-   used.  
+   used.
    It is recommended to set the more sensitive settings (`app_secret`) in
    the site's `settings.php` so that it is not in any potentially public areas,
    such as VCS.
